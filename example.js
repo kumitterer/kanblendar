@@ -18,3 +18,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 });
+
+function clearState() {
+    if (!confirm('Are you sure you want to clear the state?')) {
+        return;
+    }
+    
+    localStorage.removeItem('kanblendarState');
+    console.log('State cleared!');
+    document.location.reload();
+}
