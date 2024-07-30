@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanblendar</title>
+    <link rel="stylesheet" href="kanblendar.css">
+    <link rel="stylesheet" href="example.css">
+</head>
+<body>
+    <header>
+        <h1>Kanblendar</h1>
+        <button id="createTaskBtn">Create Task</button>
+    </header>
+    <main>
+        <section class="kanblendar" id="kanblendar"
+                 data-columns="Backlog,In Progress,Done"
+                 data-start-time="08:00"
+                 data-end-time="18:00"
+                 data-interval="60">
+            <!-- Kanban columns will be dynamically generated here -->
+        </section>
+    </main>
+    <footer>
+        <p>Brought to you by <a href="https://git.private.coffee/kumi/kanblendar">Kumi</a></p>
+    </footer>
+
+    <!-- Optional: Developers can define their own modal here -->
+
+    <script src="kanblendar.js"></script>
+    <script src="example.js"></script>
+</body>
+</html>
