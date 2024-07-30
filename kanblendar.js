@@ -250,6 +250,7 @@ class Kanblendar {
         if (dropTarget.classList.contains('kanblendar-time-slot') || dropTarget.classList.contains('kanblendar-non-timed-tasks')) {
             dropTarget.appendChild(task);
             this.emitTaskMovedEvent(task, dropTarget);
+            this.emitTaskChangedEvent('move', task);
         }
 
         // Update the task's due time if dropped in a time slot and the current due time is not valid for that slot
@@ -312,6 +313,7 @@ class Kanblendar {
                 this.moveTaskToNonTimedSection(this.currentTask, column);
             }
             this.cancelNotification(this.currentTask.id);
+            this.emitTaskChangedEvent('edit', this.currentTask);
         } else {
             newTask = this.createTaskElement(title, description, dueTime, column, notifyBefore);
             this.moveTaskToColumn(newTask, column);
@@ -320,6 +322,7 @@ class Kanblendar {
             } else {
                 this.moveTaskToNonTimedSection(newTask, column);
             }
+            this.emitTaskChangedEvent('create', newTask);
         }
 
         if (dueTime && notifyBefore >= 0) {
@@ -352,7 +355,7 @@ class Kanblendar {
         `;
         newTask.addEventListener('dragstart', (e) => this.dragStart(e));
         newTask.addEventListener('click', (e) => this.openModal(newTask)); // Add click event to open modal for editing
-        this.tasks.set(id, { title, description, dueTime, notifyBefore });
+        this.tasks.set(id, { title, description, dueTime, column, notifyBefore });
         return newTask;
     }
 
@@ -393,6 +396,7 @@ class Kanblendar {
         task.remove();
         this.tasks.delete(task.id);
         this.adjustTimeSlotHeights(); // Adjust heights after deleting a task
+        this.emitTaskChangedEvent('delete', task);
     }
 
     scheduleNotification(title, description, dueTime, notifyBefore, taskId) {
@@ -511,5 +515,15 @@ class Kanblendar {
             }
         });
         this.adjustTimeSlotHeights();
+    }
+
+    emitTaskChangedEvent(action, task) {
+        const event = new CustomEvent('taskChanged', {
+            detail: {
+                action,
+                taskId: task.id
+            }
+        });
+        document.dispatchEvent(event);
     }
 }
