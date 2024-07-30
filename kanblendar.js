@@ -295,7 +295,7 @@ class Kanblendar {
         event.preventDefault();
         const title = document.getElementById('kanblendar-taskTitle').value;
         const description = document.getElementById('kanblendar-taskDescription').value;
-        const dueTime = document.getElementById('kanblendar-taskDueTime').value;
+        const dueTime = document.getElementById('kanblendar-taskDueTime').value || null;
         const column = document.getElementById('kanblendar-taskColumn').value;
         const notifyBefore = parseInt(document.getElementById('kanblendar-taskNotify').value, 10);
 
@@ -308,12 +308,20 @@ class Kanblendar {
             this.currentTask.dataset.column = column;
             this.currentTask.dataset.notifyBefore = notifyBefore;
             this.moveTaskToColumn(this.currentTask, column);
-            this.updateTaskLocation(this.currentTask, dueTime);
+            if (dueTime) {
+                this.updateTaskLocation(this.currentTask, dueTime);
+            } else {
+                this.moveTaskToNonTimedSection(this.currentTask, column);
+            }
             this.cancelNotification(this.currentTask.id);
         } else {
             newTask = this.createTaskElement(title, description, dueTime, column, notifyBefore);
-            this.moveTaskToColumn(newTask, column); // Correctly move to the selected column
-            this.updateTaskLocation(newTask, dueTime);
+            this.moveTaskToColumn(newTask, column);
+            if (dueTime) {
+                this.updateTaskLocation(newTask, dueTime);
+            } else {
+                this.moveTaskToNonTimedSection(newTask, column);
+            }
         }
 
         if (dueTime && notifyBefore >= 0) {
@@ -322,6 +330,13 @@ class Kanblendar {
 
         this.adjustTimeSlotHeights(); // Adjust heights after saving a task
         this.closeModalFunc();
+    }
+
+    moveTaskToNonTimedSection(task, column) {
+        const columnTasks = document.getElementById(`${column}-tasks`);
+        if (columnTasks) {
+            columnTasks.appendChild(task);
+        }
     }
 
     createTaskElement(title, description, dueTime, column, notifyBefore) {
