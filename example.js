@@ -1,3 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    new Kanblendar();
+    const kanblendar = new Kanblendar();
+    const createTaskBtn = document.getElementById('createTaskBtn');
+    createTaskBtn.addEventListener('click', () => kanblendar.openModal());  
 });

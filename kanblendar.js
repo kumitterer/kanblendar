@@ -33,7 +33,6 @@ class Kanblendar {
     }
 
     init() {
-        this.createTaskBtn = document.getElementById('createTaskBtn');
         this.kanbanSection = document.getElementById('kanblendar');
 
         if (this.config.generateModal) {
@@ -44,7 +43,6 @@ class Kanblendar {
             this.taskForm = document.getElementById('kanblendar-taskForm');
         }
 
-        this.createTaskBtn.addEventListener('click', () => this.openModal());
         this.closeModal.addEventListener('click', () => this.closeModalFunc());
         window.addEventListener('click', (event) => {
             if (event.target === this.taskModal) {
