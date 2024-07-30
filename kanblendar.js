@@ -55,6 +55,7 @@ class Kanblendar {
 
         document.addEventListener('taskMoved', (e) => {
             console.log(`Task ${e.detail.taskId} moved to ${e.detail.newParent}`);
+            this.adjustTimeSlotHeights();
         });
 
         this.generateKanbanColumns(); // Generate the kanban columns
@@ -176,6 +177,8 @@ class Kanblendar {
 
             this.kanbanSection.appendChild(columnElement);
         });
+
+        this.adjustTimeSlotHeights(); // Ensure time slots have equal heights initially
     }
 
     initDragAndDrop() {
@@ -262,6 +265,8 @@ class Kanblendar {
                 task.dataset.dueTime = slotStartTime.toISOString();
             }
         }
+
+        this.adjustTimeSlotHeights(); // Adjust heights after dropping a task
     }
 
     openModal(task = null) {
@@ -315,6 +320,7 @@ class Kanblendar {
             this.scheduleNotification(title, description, new Date(dueTime), notifyBefore, this.currentTask ? this.currentTask.id : newTask.id);
         }
 
+        this.adjustTimeSlotHeights(); // Adjust heights after saving a task
         this.closeModalFunc();
     }
 
@@ -373,6 +379,7 @@ class Kanblendar {
         this.cancelNotification(task.id);
         task.remove();
         this.tasks.delete(task.id);
+        this.adjustTimeSlotHeights(); // Adjust heights after deleting a task
     }
 
     scheduleNotification(title, description, dueTime, notifyBefore, taskId) {
@@ -425,5 +432,42 @@ class Kanblendar {
             }
         });
         document.dispatchEvent(event);
+    }
+
+    adjustTimeSlotHeights() {
+        const timeSlotMap = new Map();
+        let maxNonTimedHeight = 0;
+
+        // Collect heights of each time slot
+        document.querySelectorAll('.kanblendar-time-slot').forEach(slot => {
+            const startTime = slot.dataset.startTime;
+            slot.style.height = 'auto'; // Remove any explicitly set height to get the actual height
+            const height = slot.offsetHeight;
+
+            if (!timeSlotMap.has(startTime)) {
+                timeSlotMap.set(startTime, height);
+            } else {
+                const maxHeight = Math.max(timeSlotMap.get(startTime), height);
+                timeSlotMap.set(startTime, maxHeight);
+            }
+        });
+
+        // Collect heights of non-timed tasks sections
+        document.querySelectorAll('.kanblendar-non-timed-tasks').forEach(section => {
+            section.style.height = 'auto'; // Remove any explicitly set height to get the actual height
+            const height = section.offsetHeight;
+            maxNonTimedHeight = Math.max(maxNonTimedHeight, height);
+        });
+
+        // Apply the maximum height to all corresponding time slots
+        document.querySelectorAll('.kanblendar-time-slot').forEach(slot => {
+            const startTime = slot.dataset.startTime;
+            slot.style.height = `${timeSlotMap.get(startTime)}px`;
+        });
+
+        // Apply the maximum height to all non-timed tasks sections
+        document.querySelectorAll('.kanblendar-non-timed-tasks').forEach(section => {
+            section.style.height = `${maxNonTimedHeight}px`;
+        });
     }
 }
