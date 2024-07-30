@@ -483,4 +483,33 @@ class Kanblendar {
             section.style.height = `${maxNonTimedHeight}px`;
         });
     }
+
+    serialize() {
+        const tasksArray = Array.from(this.tasks.values()).map(task => ({
+            id: task.id,
+            title: task.title,
+            description: task.description,
+            dueTime: task.dueTime,
+            column: task.column,
+            notifyBefore: task.notifyBefore
+        }));
+        return JSON.stringify(tasksArray);
+    }
+
+    deserialize(serializedData) {
+        const tasksArray = JSON.parse(serializedData);
+        tasksArray.forEach(taskData => {
+            const { id, title, description, dueTime, column, notifyBefore } = taskData;
+            const taskElement = this.createTaskElement(title, description, dueTime, column, notifyBefore);
+            taskElement.id = id; // Restore original ID
+            this.tasks.set(id, { title, description, dueTime, notifyBefore });
+            this.moveTaskToColumn(taskElement, column);
+            if (dueTime) {
+                this.updateTaskLocation(taskElement, dueTime);
+            } else {
+                this.moveTaskToNonTimedSection(taskElement, column);
+            }
+        });
+        this.adjustTimeSlotHeights();
+    }
 }
