@@ -489,8 +489,8 @@ class Kanblendar {
     }
 
     serialize() {
-        const tasksArray = Array.from(this.tasks.values()).map(task => ({
-            id: task.id,
+        const tasksArray = Array.from(this.tasks.entries()).map(([id, task]) => ({
+            id,
             title: task.title,
             description: task.description,
             dueTime: task.dueTime,
