@@ -57,9 +57,27 @@ class Kanblendar {
             console.log(`Task ${e.detail.taskId} moved to ${e.detail.newParent}`);
         });
 
-        this.generateKanbanColumns();
-        this.initDragAndDrop();
-        this.requestNotificationPermission();
+        this.generateKanbanColumns(); // Generate the kanban columns
+        this.initDragAndDrop(); // Initialize drag and drop functionality
+        this.requestNotificationPermission(); // Request permission for notifications
+        this.highlightCurrentTimeSlot(); // Highlight the current time slot
+        setInterval(() => this.highlightCurrentTimeSlot(), 60000); // Update highlight every minute
+    }
+
+    highlightCurrentTimeSlot() {
+        const now = new Date();
+        const currentTime = `${now.getHours()}:${now.getMinutes() < 10 ? '0' : ''}${now.getMinutes()}`;
+
+        document.querySelectorAll('.kanblendar-time-slot').forEach(slot => {
+            const startTime = slot.dataset.startTime;
+            const endTime = this.addMinutes(this.parseTime(startTime), this.config.interval).toTimeString().slice(0, 5);
+
+            if (currentTime >= startTime && currentTime < endTime) {
+                slot.classList.add('kanblendar-current-time');
+            } else {
+                slot.classList.remove('kanblendar-current-time');
+            }
+        });
     }
 
     createModal() {

@@ -127,3 +127,9 @@
     border-radius: 5px;
     cursor: pointer;
 }
+
+/* Current Time Highlight */
+.kanblendar-current-time {
+    background-color: #ffeb3b; /* Highlight color */
+    border-color: #fbc02d;
+}
