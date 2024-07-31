@@ -269,7 +269,13 @@ class Kanblendar {
                 task.dataset.dueTime = slotStartTime.toISOString();
             }
 
+            // Update the task's column attribute
             task.dataset.column = parentColumn.replace('-tasks', '');
+
+        } else if (dropTarget.classList.contains('kanblendar-non-timed-tasks')) {
+            const parentColumn = dropTarget.closest('.kanblendar-column').id;
+            task.dataset.column = parentColumn.replace('-tasks', '');
+            task.dataset.dueTime = null;
         }
 
         // Update the task in the tasks map
