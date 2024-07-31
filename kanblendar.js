@@ -249,7 +249,6 @@ class Kanblendar {
 
         if (dropTarget.classList.contains('kanblendar-time-slot') || dropTarget.classList.contains('kanblendar-non-timed-tasks')) {
             dropTarget.appendChild(task);
-            this.emitTaskMovedEvent(task, dropTarget);
             this.emitTaskChangedEvent('move', task);
         }
 
@@ -439,16 +438,6 @@ class Kanblendar {
                 }
             });
         }
-    }
-
-    emitTaskMovedEvent(task, target) {
-        const event = new CustomEvent('taskMoved', {
-            detail: {
-                taskId: task.id,
-                newParent: target.id
-            }
-        });
-        document.dispatchEvent(event);
     }
 
     adjustTimeSlotHeights() {
