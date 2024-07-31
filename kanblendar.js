@@ -264,6 +264,9 @@ class Kanblendar {
             }
         }
 
+        // Update the task's column in the tasks map
+        this.tasks.get(task.id).column = dropTarget.id.replace('-tasks', '');
+
         this.adjustTimeSlotHeights(); // Adjust heights after dropping a task
     }
 
