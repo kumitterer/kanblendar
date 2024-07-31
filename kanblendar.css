@@ -24,9 +24,9 @@
 .kanblendar-non-timed-tasks {
     margin-bottom: 1em;
     min-height: 50px;
-    /* Ensure it has a minimum height */
     background-color: #fafafa;
     border: 1px dashed #ddd;
+    text-align: center;
 }
 
 .kanblendar-task {
@@ -130,6 +130,7 @@
 
 /* Current Time Highlight */
 .kanblendar-current-time {
-    background-color: #ffeb3b; /* Highlight color */
+    background-color: #ffeb3b;
+    /* Highlight color */
     border-color: #fbc02d;
 }
