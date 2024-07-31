@@ -353,12 +353,12 @@ class Kanblendar {
         }
     }
 
-    createTaskElement(title, description, dueTime, column, notifyBefore) {
-        const id = `task-${Date.now()}`;
+    createTaskElement(title, description, dueTime, column, notifyBefore, id = null) {
+        const taskId = id || `task-${Date.now()}`;
         const newTask = document.createElement('div');
         newTask.classList.add('kanblendar-task');
         newTask.setAttribute('draggable', 'true');
-        newTask.setAttribute('id', id);
+        newTask.setAttribute('id', taskId);
         newTask.dataset.dueTime = dueTime;
         newTask.dataset.column = column;
         newTask.dataset.notifyBefore = notifyBefore;
@@ -368,7 +368,7 @@ class Kanblendar {
         `;
         newTask.addEventListener('dragstart', (e) => this.dragStart(e));
         newTask.addEventListener('click', (e) => this.openModal(newTask)); // Add click event to open modal for editing
-        this.tasks.set(id, { title, description, dueTime, column, notifyBefore });
+        this.tasks.set(taskId, { title, description, dueTime, column, notifyBefore });
         return newTask;
     }
 
@@ -507,9 +507,8 @@ class Kanblendar {
         const tasksArray = JSON.parse(serializedData);
         tasksArray.forEach(taskData => {
             const { id, title, description, dueTime, column, notifyBefore } = taskData;
-            const taskElement = this.createTaskElement(title, description, dueTime, column, notifyBefore);
-            taskElement.id = id; // Restore original ID
-            this.tasks.set(id, { title, description, dueTime, notifyBefore });
+            const taskElement = this.createTaskElement(title, description, dueTime, column, notifyBefore, id);
+            this.tasks.set(id, { title, description, dueTime, column, notifyBefore });
             this.moveTaskToColumn(taskElement, column);
             if (dueTime) {
                 this.updateTaskLocation(taskElement, dueTime);
