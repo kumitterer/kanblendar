@@ -89,7 +89,7 @@ class Kanblendar {
                         <label for="kanblendar-taskTitle">Title:</label>
                         <input type="text" id="kanblendar-taskTitle" name="kanblendar-taskTitle" required>
                         <label for="kanblendar-taskDescription">Description:</label>
-                        <textarea id="kanblendar-taskDescription" name="kanblendar-taskDescription" required></textarea>
+                        <textarea id="kanblendar-taskDescription" name="kanblendar-taskDescription"></textarea>
                         <label for="kanblendar-taskDueTime">Due Time:</label>
                         <input type="datetime-local" id="kanblendar-taskDueTime" name="kanblendar-taskDueTime">
                         <label for="kanblendar-taskColumn">Column:</label>
