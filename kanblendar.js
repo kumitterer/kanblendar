@@ -249,12 +249,12 @@ class Kanblendar {
 
         if (dropTarget.classList.contains('kanblendar-time-slot') || dropTarget.classList.contains('kanblendar-non-timed-tasks')) {
             dropTarget.appendChild(task);
-            this.emitTaskChangedEvent('move', task);
         }
 
         // Update the task's due time if dropped in a time slot and the current due time is not valid for that slot
         if (dropTarget.classList.contains('kanblendar-time-slot')) {
             const startTime = dropTarget.dataset.startTime;
+            const parentColumn = dropTarget.closest('.kanblendar-column').id;
 
             const slotStartTime = new Date(`${this.config.currentDate}T${startTime}:00`);
             const slotEndTime = this.addMinutes(slotStartTime, this.config.interval);
@@ -268,14 +268,17 @@ class Kanblendar {
             } else {
                 task.dataset.dueTime = slotStartTime.toISOString();
             }
+
+            task.dataset.column = parentColumn.replace('-tasks', '');
         }
 
-
         // Update the task in the tasks map
-        this.tasks.get(task.id).column = dropTarget.id.replace('-tasks', '');
+        this.tasks.get(task.id).column = task.dataset.column;
         this.tasks.get(task.id).dueTime = task.dataset.dueTime;
 
         this.adjustTimeSlotHeights(); // Adjust heights after dropping a task
+
+        this.emitTaskChangedEvent('move', task);
     }
 
     openModal(task = null) {
