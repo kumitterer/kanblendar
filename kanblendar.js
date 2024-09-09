@@ -293,7 +293,11 @@ class Kanblendar {
             document.getElementById('kanblendar-modalTitle').innerText = 'Edit Task';
             document.getElementById('kanblendar-taskTitle').value = task.querySelector('.kanblendar-task-title').innerText;
             document.getElementById('kanblendar-taskDescription').value = task.querySelector('.kanblendar-task-desc').innerText;
-            document.getElementById('kanblendar-taskDueTime').value = task.dataset.dueTime || '';
+            
+            // Convert task's dueTime to a valid datetime-local format
+            const dueTime = task.dataset.dueTime ? new Date(task.dataset.dueTime).toISOString().slice(0,16) : '';
+            document.getElementById('kanblendar-taskDueTime').value = dueTime;
+            
             document.getElementById('kanblendar-taskColumn').value = task.dataset.column || '';
             document.getElementById('kanblendar-taskNotify').value = task.dataset.notifyBefore || '';
             this.deleteTaskBtn.style.display = 'block'; // Show delete button when editing
@@ -304,6 +308,7 @@ class Kanblendar {
         }
         this.taskModal.style.display = 'flex';
     }
+    
 
     closeModalFunc() {
         this.taskModal.style.display = 'none';
