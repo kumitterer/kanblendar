@@ -1,34 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kanblendar</title>
-    <link rel="stylesheet" href="kanblendar.css">
-    <link rel="stylesheet" href="example.css">
-</head>
-<body>
+    <link rel="stylesheet" href="kanblendar.css" />
+    <link rel="stylesheet" href="example.css" />
+  </head>
+  <body>
     <header>
-        <h1>Kanblendar</h1>
-        <button id="createTaskBtn">Create Task</button>
+      <h1>Kanblendar</h1>
+      <input type="date" id="kanblendarDate" />
+      <button id="updateDateBtn">Update Date</button>
+      <button id="createTaskBtn">Create Task</button>
     </header>
     <main>
-        <section class="kanblendar" id="kanblendar"
-                 data-columns="Backlog,In Progress,Done"
-                 data-start-time="08:00"
-                 data-end-time="18:00"
-                 data-interval="60">
-            <!-- Kanban columns will be dynamically generated here -->
-        </section>
+      <section
+        class="kanblendar"
+        id="kanblendar"
+        data-columns="Backlog,In Progress,Done"
+        data-start-time="08:00"
+        data-end-time="18:00"
+        data-interval="60"
+      >
+        <!-- Kanban columns will be dynamically generated here -->
+      </section>
     </main>
     <footer>
-        <div class="footer-left"><a href="#" onclick="javascript:clearState(); return false;">Delete all entries</a></div>
-        <div class="footer-right">Brought to you by <a href="https://git.private.coffee/kumi/kanblendar">Kumi</a></div>
+      <div class="footer-left">
+        <a href="#" onclick="javascript:clearState(); return false;"
+          >Delete all entries</a
+        >
+      </div>
+      <div class="footer-right">
+        Brought to you by
+        <a href="https://git.private.coffee/kumi/kanblendar">Kumi</a>
+      </div>
     </footer>
 
     <!-- Optional: Developers can define their own modal here -->
 
     <script src="kanblendar.js"></script>
     <script src="example.js"></script>
-</body>
+  </body>
 </html>
