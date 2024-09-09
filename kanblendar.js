@@ -60,6 +60,7 @@ class Kanblendar {
         this.initDragAndDrop(); // Initialize drag and drop functionality
         this.requestNotificationPermission(); // Request permission for notifications
         this.highlightCurrentTimeSlot(); // Highlight the current time slot
+        this.updateTaskDisplay(); // Hide tasks completed before today
         setInterval(() => this.highlightCurrentTimeSlot(), 60000); // Update highlight every minute
     }
 
@@ -293,11 +294,11 @@ class Kanblendar {
             document.getElementById('kanblendar-modalTitle').innerText = 'Edit Task';
             document.getElementById('kanblendar-taskTitle').value = task.querySelector('.kanblendar-task-title').innerText;
             document.getElementById('kanblendar-taskDescription').value = task.querySelector('.kanblendar-task-desc').innerText;
-            
+
             // Convert task's dueTime to a valid datetime-local format
-            const dueTime = task.dataset.dueTime ? new Date(task.dataset.dueTime).toISOString().slice(0,16) : '';
+            const dueTime = task.dataset.dueTime ? new Date(task.dataset.dueTime).toISOString().slice(0, 16) : '';
             document.getElementById('kanblendar-taskDueTime').value = dueTime;
-            
+
             document.getElementById('kanblendar-taskColumn').value = task.dataset.column || '';
             document.getElementById('kanblendar-taskNotify').value = task.dataset.notifyBefore || '';
             this.deleteTaskBtn.style.display = 'block'; // Show delete button when editing
@@ -308,7 +309,7 @@ class Kanblendar {
         }
         this.taskModal.style.display = 'flex';
     }
-    
+
 
     closeModalFunc() {
         this.taskModal.style.display = 'none';
@@ -527,6 +528,7 @@ class Kanblendar {
                 this.moveTaskToNonTimedSection(taskElement, column);
             }
         });
+        this.updateTaskDisplay();
         this.adjustTimeSlotHeights();
     }
 
@@ -538,5 +540,26 @@ class Kanblendar {
             }
         });
         document.dispatchEvent(event);
+    }
+
+    updateTaskDisplay() {
+        const now = new Date();
+        now.setHours(0, 0, 0, 0);
+
+        // Iterate over each task and check its column and due date
+        this.tasks.forEach((task, taskId) => {
+            const taskElement = document.getElementById(taskId);
+
+            // Parse the task's due time
+            const taskDueDate = task.dueTime ? new Date(task.dueTime) : null;
+
+            if (task.column === 'done' && taskDueDate && taskDueDate < now) {
+                // Hide tasks that are done and before today's date
+                taskElement.style.display = 'none';
+            } else {
+                // Show all other tasks
+                taskElement.style.display = 'block';
+            }
+        });
     }
 }
